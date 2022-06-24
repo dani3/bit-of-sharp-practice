@@ -1,6 +1,6 @@
 # Bit of sharp practice
 
-This is an attempt to implement a game inspired by the game [The Sting!](https://en.wikipedia.org/wiki/The_Sting!). The game is going to be implemented in Java 16 and OpenGl.
+This is an attempt to implement a game inspired by the game [The Sting!](https://en.wikipedia.org/wiki/The_Sting!). The game is going to be implemented in _Java 16_ and _OpenGl_.
 
 ## Dependencies
 
@@ -13,11 +13,12 @@ This is an attempt to implement a game inspired by the game [The Sting!](https:/
 
 ### Game development
 
-TBD
+* [The Cherno's Game Engine](https://www.youtube.com/watch?v=vtWdgtMo1T4&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT&index=2)
 
 ### OpenGL
 
-TBD
+* [OpenGL 3D Game Tutorial](https://www.youtube.com/watch?v=VS8wlS9hF8E&list=PLRIWtICgwaX0u7Rf9zkZhLoLuZVfUksDP&index=1)
+* [Learn OpenGL](https://learnopengl.com/Introduction)
 
 ### Java
 
