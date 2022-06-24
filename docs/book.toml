@@ -1,0 +1,6 @@
+[book]
+authors = ["Daniel Mancebo Aldea", "Sandra Torres Roldan"]
+language = "en"
+multilingual = false
+src = "src"
+title = "bit of sharp practice"

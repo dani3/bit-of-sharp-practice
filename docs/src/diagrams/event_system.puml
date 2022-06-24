@@ -1,0 +1,124 @@
+@startuml
+enum EventType {
+    None
+    MouseButtonPressed
+    MouseButtonReleased
+    MouseScrolled
+    WindowResized
+    WindowClosed
+    WindowHasFocus
+    WindowLostFocus
+    KeyTyped
+    KeyPressed
+    KeyReleased
+}
+
+enum EventCategory {
+    None
+    Application
+    Input
+    Keyboard
+    Mouse
+    MouseButton
+}
+
+abstract class Event {
+    - EventType event
+    - EventCategory category
+    {abstract} + EventType getEvent()
+    {abstract} + EventType getCategory()
+    {abstract} + String toString()
+    + boolean isCategory(EventCategory category)
+}
+
+enum MouseButton {
+    Left
+    Right
+    Middle
+}
+
+class MouseButtonEvent {
+    - MouseButton button
+    # MouseButtonEvent(MouseButton button)
+    + MouseButton GetButton()
+}
+
+class MouseButtonPressedEvent {
+    + MouseButtonPressedEvent(MouseButton button)
+}
+
+class MouseButtonReleasedEvent {
+    + MouseButtonReleasedEvent(MouseButton button)
+}
+
+class MouseMovedEvent {
+    - float x
+    - float y
+    + MouseMovedEvent(float x, float y)
+    + float getX()
+    + float getY()
+}
+
+class MouseScrolledEvent {
+    - float xOffset
+    - float yOffset
+    + MouseScrolledEvent(float xOffset, float yOffset)
+    + float getXOffset()
+    + float getYOffset()
+}
+
+class KeyEvent {
+    - int keycode
+    # KeyEvent(int keycode)
+    + int getKeycode()
+}
+
+class KeyPressedEvent {
+    - int repeatCount
+    + KeyKeyPressedEvent(int keycode, int repeatCount)
+    + int getRepeatCount()
+}
+
+class KeyReleaseEvent {
+    + KeyKeyReleaseEvent(int keycode)
+}
+
+class WindowResizedEvent {
+    - int height
+    - int width
+    + WindowResizedEvent(int height, int width)
+    + int getHeight()
+    + int getWidth()
+}
+class WindowClosedEvent {
+    + WindowClosedEvent()
+}
+
+class WindowHasFocus {
+    + WindowHasFocus()
+}
+
+class WindowLostFocus {
+    + WindowLostFocus()
+}
+
+EventType o-- Event
+EventCategory o-- Event
+MouseButton o-- MouseButtonEvent
+
+MouseButtonEvent --> MouseButtonPressedEvent
+MouseButtonEvent --> MouseButtonReleasedEvent
+
+KeyEvent --> KeyPressedEvent
+KeyEvent --> KeyReleaseEvent
+
+Event --> MouseButtonEvent
+Event --> MouseMovedEvent
+Event --> MouseScrolledEvent
+Event --> KeyEvent
+Event --> WindowResizedEvent
+Event --> WindowClosedEvent
+Event --> WindowHasFocus
+Event --> WindowLostFocus
+
+@enduml
