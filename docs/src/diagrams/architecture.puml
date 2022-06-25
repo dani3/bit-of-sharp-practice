@@ -1,0 +1,66 @@
+@startuml
+
+!theme reddress-lightorange
+
+interface IEventListener {
+    + void onEvent(Event event)
+}
+
+class Renderer {
+}
+
+class WindowProps {
+    - String title
+    - int width
+    - int height
+    + WindowProps(String title, int width, int height)
+}
+
+class Window {
+    {static} + Window newInstance(WindowProps props)
+    + int getHeight()
+    + int getWidth()
+    + void addOnEventListener(IEventListener listener)
+    - void Init()
+    - void Shutdown()
+}
+
+class LayerStack {
+    - List<Layer> layers
+    + LayerStack()
+    + void pushLayer(Layer layer)
+    + void pushOverlay(Layer overlay)
+    + void popLayer(Layer layer)
+    + void popOverlay(Layer overlay)
+}
+
+class Layer {
+    # String debugName
+    + Layer()
+    + Layer(String name)
+    + void OnAttach()
+    + void OnDetach()
+    + void OnUpdate(TimeStep ts)
+    + void OnImGuiRender()
+    + void OnEvent(Event event)
+    + boolean equals(Layer other)
+}
+
+class Application implements IEventListener {
+    - Window window
+    - LayerStack layerStack
+    + void run()
+    + void pushLayer(Layer layer)
+    + void pushOverlay(Layer overlay)
+    - void onWindowClosed(WindowClosedEvent event)
+    - void onWindowResized(WindowResizedEvent event)
+}
+
+Application --o "1" Window : has
+Application --o "1" LayerStack : has
+Application -left-o "1" Renderer : uses
+
+LayerStack --o "0.." Layer
+Window --o "1" WindowProps
+
+@enduml

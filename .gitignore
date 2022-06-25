@@ -29,5 +29,9 @@ shelf/
 .idea/dictionaries
 .gradle/
 
+# Output folders
+bin/
+build/
+
 # Gradle
 !gradle-wrapper.jar

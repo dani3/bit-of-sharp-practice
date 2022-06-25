@@ -1,4 +1,7 @@
 @startuml
+
+!theme reddress-lightorange
+
 enum EventType {
     None
     MouseButtonPressed
@@ -37,21 +40,21 @@ enum MouseButton {
     Middle
 }
 
-class MouseButtonEvent {
+class MouseButtonEvent extends Event {
     - MouseButton button
     # MouseButtonEvent(MouseButton button)
     + MouseButton GetButton()
 }
 
-class MouseButtonPressedEvent {
+class MouseButtonPressedEvent extends MouseButtonEvent {
     + MouseButtonPressedEvent(MouseButton button)
 }
 
-class MouseButtonReleasedEvent {
+class MouseButtonReleasedEvent extends MouseButtonEvent {
     + MouseButtonReleasedEvent(MouseButton button)
 }
 
-class MouseMovedEvent {
+class MouseMovedEvent extends Event {
     - float x
     - float y
     + MouseMovedEvent(float x, float y)
@@ -59,7 +62,7 @@ class MouseMovedEvent {
     + float getY()
 }
 
-class MouseScrolledEvent {
+class MouseScrolledEvent extends Event {
     - float xOffset
     - float yOffset
     + MouseScrolledEvent(float xOffset, float yOffset)
@@ -67,58 +70,43 @@ class MouseScrolledEvent {
     + float getYOffset()
 }
 
-class KeyEvent {
+class KeyEvent extends Event {
     - int keycode
     # KeyEvent(int keycode)
     + int getKeycode()
 }
 
-class KeyPressedEvent {
+class KeyPressedEvent extends KeyEvent {
     - int repeatCount
     + KeyKeyPressedEvent(int keycode, int repeatCount)
     + int getRepeatCount()
 }
 
-class KeyReleaseEvent {
-    + KeyKeyReleaseEvent(int keycode)
+class KeyReleasedEvent extends KeyEvent {
+    + KeyKeyReleasedEvent(int keycode)
 }
 
-class WindowResizedEvent {
+class WindowResizedEvent extends Event {
     - int height
     - int width
     + WindowResizedEvent(int height, int width)
     + int getHeight()
     + int getWidth()
 }
-class WindowClosedEvent {
+class WindowClosedEvent extends Event {
     + WindowClosedEvent()
 }
 
-class WindowHasFocus {
+class WindowHasFocus extends Event {
     + WindowHasFocus()
 }
 
-class WindowLostFocus {
+class WindowLostFocus extends Event {
     + WindowLostFocus()
 }
 
 EventType o-- Event
 EventCategory o-- Event
 MouseButton o-- MouseButtonEvent
-
-MouseButtonEvent --> MouseButtonPressedEvent
-MouseButtonEvent --> MouseButtonReleasedEvent
-
-KeyEvent --> KeyPressedEvent
-KeyEvent --> KeyReleaseEvent
-
-Event --> MouseButtonEvent
-Event --> MouseMovedEvent
-Event --> MouseScrolledEvent
-Event --> KeyEvent
-Event --> WindowResizedEvent
-Event --> WindowClosedEvent
-Event --> WindowHasFocus
-Event --> WindowLostFocus
 
 @enduml

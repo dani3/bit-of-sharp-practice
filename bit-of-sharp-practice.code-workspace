@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"editor.tabSize": 4,
+		"files.trimTrailingWhitespace": true,
+		"editor.formatOnSave": true,
+		// PlantUML
+		"plantuml.exportFormat": "png",
+		"plantuml.exportOutDir": "${workspaceFolder}/docs/src/diagrams",
+		// Java
+		"java.jdt.ls.java.home": "C:/Program Files/Java/jdk-16.0.2",
+		"java.configuration.updateBuildConfiguration": "automatic",
+		"java.format.enabled": true,
+	}
+}

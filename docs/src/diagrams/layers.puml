@@ -1,0 +1,27 @@
+@startuml
+
+!theme reddress-lightorange
+
+class LayerStack {
+    - List<Layer> layers
+    + LayerStack()
+    + void pushLayer(Layer layer)
+    + void pushOverlay(Layer overlay)
+    + void popLayer(Layer layer)
+    + void popOverlay(Layer overlay)
+}
+
+class Layer {
+    # String debugName
+    + Layer()
+    + Layer(String name)
+    + void OnAttach()
+    + void OnDetach()
+    + void OnUpdate(TimeStep ts)
+    + void OnImGuiRender()
+    + void OnEvent(Event event)
+    + boolean equals(Layer other)
+}
+
+LayerStack --o Layer
+@enduml
