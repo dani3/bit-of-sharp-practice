@@ -1,0 +1,7 @@
+{
+    "recommendations": [
+        "richardwillis.vscode-gradle-extension-pack",
+        "vscjava.vscode-java-pack",
+        "jebbs.plantuml"
+    ]
+}
