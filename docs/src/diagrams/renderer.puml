@@ -1,0 +1,103 @@
+@startuml
+
+!theme reddress-lightorange
+footer Renderer package
+
+class BufferElement {
+    - String name
+    - ShaderDataType type
+    - int size
+    - int offset
+    - boolean normalized
+    + BufferElement()
+    + BufferElement(ShaderDataType type name, normalized)
+    ~ int getComponentCount()
+}
+
+class BufferLayout {
+    - List<BufferElement> elements
+    - int stride
+    + BufferLayout()
+    + BufferLayout(List<BufferElements> elements)
+    + List<BufferElement> getElements()
+    + int getStride()
+}
+
+abstract class VertexBuffer {
+    {static} + VertexBuffer create(float[] vertices, int size)
+    {abstract} + void bind()
+    {abstract} + void unbind()
+    {abstract} + void setLayout(BufferLayout layout)
+    {abstract} + BufferLayout getBufferLayout()
+}
+
+abstract class IndexBuffer {
+    {static} + IndexBuffer create(float[] indices, int size)
+    {abstract} + void bind()
+    {abstract} + void unbind()
+    {abstract} + int getCount()
+}
+
+abstract class VertexArray {
+    {static} + VertexArray create()
+    {abstract} + void bind()
+    {abstract} + void unbind()
+    {abstract} + void addVertexBuffer(VertexBuffer vertexBuffer)
+    {abstract} + void setIndexBuffer(IndexBuffer indexBuffer)
+}
+
+VertexBuffer --> BufferLayout
+BufferLayout --o "1.." BufferElement
+VertexArray --> VertexBuffer
+VertexArray --> IndexBuffer
+
+class OpenGLVertexArray extends VertexArray
+class OpenGLVertexBuffer extends VertexBuffer
+class OpenGLIndexBuffer extends IndexBuffer
+
+abstract class Texture {
+
+}
+
+class OpenGLTexture extends Texture
+
+abstract class Shader {
+
+}
+
+class OpenGLShader extends Shader
+
+abstract class RendererAPI {
+    + {static} API getAPI()
+    {abstract} + void init()
+    {abstract} + void setClearColor(Vec4 color)
+    {abstract} + void setViewport(int x, int y, int width, int height)
+    {abstract} + void drawIndexed(VertexArray vertexArray)
+}
+
+class RenderCommand {
+    - {static} rendererAPI
+    {static} + init()
+    {static} + setViewport(int x, int y, int width, int height)
+    {static} + setCleaerColor(Vec4 color)
+    {static} + clear()
+    {static} + drawIndexed(VertexArray vertexArray)
+}
+
+class OpenGLRendererAPI extends RendererAPI
+
+RenderCommand -up-> RendererAPI : uses
+
+class Renderer {
+    {static} + void init()
+    {static} + void onWindowResize(int width, int height)
+    {static} + void beginScene(Camera camera)
+    {static} + void endScene()
+    {static} + void submit(Shader shader, VertexArray vertexArray, Mat4 transform)
+    {static} + RendererAPI getAPI()
+}
+
+Renderer --> RendererAPI : uses
+Renderer --> RenderCommand : uses
+
+@enduml

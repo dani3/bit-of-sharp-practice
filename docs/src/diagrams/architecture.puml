@@ -1,6 +1,7 @@
 @startuml
 
 !theme reddress-lightorange
+footer Game engine architecture
 
 interface IEventListener {
     + void onEvent(Event event)
@@ -16,14 +17,20 @@ class WindowProps {
     + WindowProps(String title, int width, int height)
 }
 
-class Window {
-    {static} + Window newInstance(WindowProps props)
-    + int getHeight()
-    + int getWidth()
-    + void addOnEventListener(IEventListener listener)
-    - void Init()
-    - void Shutdown()
+abstract class Window {
+    {static} + Window create(WindowProps props)
+    {abstract} + int getHeight()
+    {abstract} + int getWidth()
+    {abstract} + int onUpdate()
+    {abstract} + void setVSync(boolean enabled)
+    {abstract} + boolean isVSync()
+    {abstract} + void addOnEventListener(IEventListener listener)
 }
+
+note left of Window
+    Platform-agnostic abstract class
+    that must be implemented for each OS.
+end note
 
 class LayerStack {
     - List<Layer> layers
@@ -34,19 +41,18 @@ class LayerStack {
     + void popOverlay(Layer overlay)
 }
 
-class Layer {
+abstract class Layer {
     # String debugName
     + Layer()
     + Layer(String name)
-    + void OnAttach()
-    + void OnDetach()
-    + void OnUpdate(TimeStep ts)
-    + void OnImGuiRender()
-    + void OnEvent(Event event)
-    + boolean equals(Layer other)
+    {abstract} + void OnAttach()
+    {abstract} + void OnDetach()
+    {abstract} + void OnUpdate(TimeStep ts)
+    {abstract} + void OnEvent(Event event)
+    {abstract} + boolean equals(Layer other)
 }
 
-class Application implements IEventListener {
+abstract class Application implements IEventListener {
     - Window window
     - LayerStack layerStack
     + void run()
@@ -56,11 +62,16 @@ class Application implements IEventListener {
     - void onWindowResized(WindowResizedEvent event)
 }
 
-Application --o "1" Window : has
-Application --o "1" LayerStack : has
-Application -left-o "1" Renderer : uses
+note right of Application
+    The game application must extend this class
+    and implement its own logic.
+end note
 
-LayerStack --o "0.." Layer
-Window --o "1" WindowProps
+Application --o "1 " Window : has
+Application --o "1  " LayerStack : has
+Application -left-o "1 " Renderer : uses
+
+LayerStack --o "0.. " Layer
+Window --o "1 " WindowProps
 
 @enduml

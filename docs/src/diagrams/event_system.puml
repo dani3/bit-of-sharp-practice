@@ -1,6 +1,7 @@
 @startuml
 
 !theme reddress-lightorange
+footer Event system
 
 enum EventType {
     None
@@ -40,6 +41,10 @@ enum MouseButton {
     Middle
 }
 
+enum KeyCode {
+    ...
+}
+
 class MouseButtonEvent extends Event {
     - MouseButton button
     # MouseButtonEvent(MouseButton button)
@@ -48,10 +53,16 @@ class MouseButtonEvent extends Event {
 
 class MouseButtonPressedEvent extends MouseButtonEvent {
     + MouseButtonPressedEvent(MouseButton button)
+    + EventType getEvent()
+    + EventType getCategory()
+    + String toString()
 }
 
 class MouseButtonReleasedEvent extends MouseButtonEvent {
     + MouseButtonReleasedEvent(MouseButton button)
+    + EventType getEvent()
+    + EventType getCategory()
+    + String toString()
 }
 
 class MouseMovedEvent extends Event {
@@ -60,6 +71,9 @@ class MouseMovedEvent extends Event {
     + MouseMovedEvent(float x, float y)
     + float getX()
     + float getY()
+    + EventType getEvent()
+    + EventType getCategory()
+    + String toString()
 }
 
 class MouseScrolledEvent extends Event {
@@ -68,22 +82,31 @@ class MouseScrolledEvent extends Event {
     + MouseScrolledEvent(float xOffset, float yOffset)
     + float getXOffset()
     + float getYOffset()
+    + EventType getEvent()
+    + EventType getCategory()
+    + String toString()
 }
 
 class KeyEvent extends Event {
-    - int keycode
-    # KeyEvent(int keycode)
-    + int getKeycode()
+    - KeyCode keycode
+    # KeyEvent(KeyCode keycode)
+    + KeyCode getKeycode()
 }
 
 class KeyPressedEvent extends KeyEvent {
     - int repeatCount
     + KeyKeyPressedEvent(int keycode, int repeatCount)
     + int getRepeatCount()
+    + EventType getEvent()
+    + EventType getCategory()
+    + String toString()
 }
 
 class KeyReleasedEvent extends KeyEvent {
     + KeyKeyReleasedEvent(int keycode)
+    + EventType getEvent()
+    + EventType getCategory()
+    + String toString()
 }
 
 class WindowResizedEvent extends Event {
@@ -92,21 +115,34 @@ class WindowResizedEvent extends Event {
     + WindowResizedEvent(int height, int width)
     + int getHeight()
     + int getWidth()
+    + EventType getEvent()
+    + EventType getCategory()
+    + String toString()
 }
 class WindowClosedEvent extends Event {
     + WindowClosedEvent()
+    + EventType getEvent()
+    + EventType getCategory()
+    + String toString()
 }
 
 class WindowHasFocus extends Event {
     + WindowHasFocus()
+    + EventType getEvent()
+    + EventType getCategory()
+    + String toString()
 }
 
 class WindowLostFocus extends Event {
     + WindowLostFocus()
+    + EventType getEvent()
+    + EventType getCategory()
+    + String toString()
 }
 
-EventType o-- Event
-EventCategory o-- Event
-MouseButton o-- MouseButtonEvent
+KeyEvent -- KeyCode
+EventType -- Event
+EventCategory -- Event
+MouseButton -- MouseButtonEvent
 
 @enduml

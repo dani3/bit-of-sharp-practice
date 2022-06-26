@@ -1,6 +1,7 @@
 @startuml
 
 !theme reddress-lightorange
+footer Layers
 
 class LayerStack {
     - List<Layer> layers
@@ -11,17 +12,17 @@ class LayerStack {
     + void popOverlay(Layer overlay)
 }
 
-class Layer {
+abstract class Layer {
     # String debugName
     + Layer()
     + Layer(String name)
-    + void OnAttach()
-    + void OnDetach()
-    + void OnUpdate(TimeStep ts)
-    + void OnImGuiRender()
-    + void OnEvent(Event event)
-    + boolean equals(Layer other)
+    {abstract} + void OnAttach()
+    {abstract} + void OnDetach()
+    {abstract} + void OnUpdate(TimeStep ts)
+    {abstract} + void OnEvent(Event event)
+    {abstract} + boolean equals(Layer other)
 }
 
-LayerStack --o Layer
+LayerStack --o "0.. " Layer : contains
+
 @enduml

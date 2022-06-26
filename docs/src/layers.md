@@ -15,7 +15,7 @@ The main layer will be the 3D window, in which the game will be rendered. The re
 
 Events are, however, handled in **reverse order**. The last layer drawn to the screen will be the the first (and only) layer to handle the event. For example, if there is a button drawn and the user clicks on it, we want the button to process the event, instead of moving the character.
 
-![Diagram](./diagrams/layers.png)
+![Diagram](./diagrams/layers/layers.png)
 
 ## References
 
