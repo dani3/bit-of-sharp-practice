@@ -4,7 +4,7 @@ This is an attempt to implement a game inspired by the game [The Sting!](https:/
 
 ## Dependencies
 
-* [Java 16](https://www.oracle.com/java/technologies/javase/jdk16-archive-downloads.html).
+* [Java 16](https://www.oracle.com/java/technologies/javase/jdk16-archive-downloads.html)
 * [IntelliJ IDEA](https://www.jetbrains.com/idea/download/?fromIDE=#section=windows)
 
 ## References
