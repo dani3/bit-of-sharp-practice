@@ -27,8 +27,6 @@ enum EventCategory {
 }
 
 abstract class Event {
-    - EventType event
-    - EventCategory category
     {abstract} + EventType getEvent()
     {abstract} + EventType getCategory()
     {abstract} + String toString()
