@@ -2,7 +2,7 @@ package sandbox;
 
 import engine.core.Application;
 import engine.core.WindowProps;
-import engine.windows.WindowsWindow;
+import engine.core.Window;
 
 public class Sandbox extends Application {
 
@@ -11,7 +11,7 @@ public class Sandbox extends Application {
     }
 
     public Sandbox() {
-        super(new WindowsWindow(
+        super(new Window(
                 new WindowProps("Sandbox", 800, 600)));
         pushLayer(new Sandbox3D());
     }

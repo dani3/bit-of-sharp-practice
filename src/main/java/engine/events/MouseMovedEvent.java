@@ -4,19 +4,19 @@ import java.text.MessageFormat;
 
 public class MouseMovedEvent extends Event {
 
-    private int mX;
-    private int mY;
+    private float mX;
+    private float mY;
 
-    public MouseMovedEvent(int x, int y) {
+    public MouseMovedEvent(float x, float y) {
         mX = x;
         mY = y;
     }
 
-    public int getX() {
+    public float getX() {
         return mX;
     }
 
-    public int getY() {
+    public float getY() {
         return mY;
     }
 

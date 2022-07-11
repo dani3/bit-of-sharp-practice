@@ -13,6 +13,7 @@ public enum EventType {
     WindowClosed,
     WindowHasFocus,
     WindowLostFocus,
+    KeyTyped,
     KeyPressed,
     KeyReleased,
 }

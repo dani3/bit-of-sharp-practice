@@ -4,7 +4,7 @@ import java.text.MessageFormat;
 
 public class MouseButtonReleasedEvent extends MouseButtonEvent {
 
-    public MouseButtonReleasedEvent(MouseButton button) {
+    public MouseButtonReleasedEvent(int button) {
         super(button);
     }
 
