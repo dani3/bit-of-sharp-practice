@@ -70,25 +70,25 @@ public class LayerStack implements Iterable<Layer> {
      */
     private class LayerStackIterator implements Iterator<Layer> {
 
-        private Iterator<Layer> mCurrent;
+        private Iterator<Layer> mIterator;
 
         private LayerStackIterator(LayerStack stack) {
-            mCurrent = stack.mLayers.iterator();
+            mIterator = stack.mLayers.iterator();
         }
 
         @Override
         public boolean hasNext() {
-            return mCurrent.hasNext();
+            return mIterator.hasNext();
         }
 
         @Override
         public Layer next() {
-            return mCurrent.next();
+            return mIterator.next();
         }
 
         @Override
         public void remove() {
-            mCurrent.remove();
+            mIterator.remove();
         }
     }
 }

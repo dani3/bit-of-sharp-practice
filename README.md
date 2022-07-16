@@ -20,3 +20,4 @@ This is an attempt to implement a game inspired by the game [The Sting!](https:/
 
 * [OpenGL 3D Game Tutorial](https://www.youtube.com/watch?v=VS8wlS9hF8E&list=PLRIWtICgwaX0u7Rf9zkZhLoLuZVfUksDP&index=1)
 * [Learn OpenGL](https://learnopengl.com/Introduction)
+* [LWJGL Javadocs](https://javadoc.lwjgl.org/overview-summary.html)
