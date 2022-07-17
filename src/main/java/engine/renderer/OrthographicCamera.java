@@ -1,5 +1,6 @@
 package engine.renderer;
 
+import org.joml.Math;
 import org.joml.Matrix4d;
 import org.joml.Vector3d;
 
@@ -13,11 +14,14 @@ public class OrthographicCamera {
     private float mRotation = 0.0f;
 
     public OrthographicCamera(float left, float right, float bottom, float top) {
-        // TODO
+        mProjectionMatrix = new Matrix4d().ortho(left, right, bottom, top, -1.0, 1.0);
+        mViewMatrix = new Matrix4d().identity();
+        mViewProjectionMatrix = mProjectionMatrix.mul(mViewMatrix);
     }
 
     public void setProjection(float left, float right, float bottom, float top) {
-        // TODO
+        mProjectionMatrix = new Matrix4d().ortho(left, right, bottom, top, -1.0, 1.0);
+        mViewProjectionMatrix = mProjectionMatrix.mul(mViewMatrix);
     }
 
     public Vector3d getPosition() {
@@ -30,10 +34,12 @@ public class OrthographicCamera {
 
     public void setPosition(Vector3d position) {
         mPosition = position;
+        recalculateViewMatrix();
     }
 
     public void setRotation(float rotation) {
         mRotation = rotation;
+        recalculateViewMatrix();
     }
 
     public Matrix4d getProjectionMatrix() {
@@ -46,5 +52,14 @@ public class OrthographicCamera {
 
     public Matrix4d getViewProjectionMatrix() {
         return mViewProjectionMatrix;
+    }
+
+    private void recalculateViewMatrix() {
+        Matrix4d translation = new Matrix4d().identity().translate(mPosition);
+        Matrix4d rotation = new Matrix4d().identity().rotate(Math.toRadians(mRotation), new Vector3d(0.0, 0.0, 1.0));
+        Matrix4d transform = translation.mul(rotation);
+
+        mViewMatrix = transform.invert();
+        mViewProjectionMatrix = mProjectionMatrix.mul(mViewMatrix);
     }
 }
