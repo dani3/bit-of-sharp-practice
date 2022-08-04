@@ -14,12 +14,10 @@ This is an attempt to implement a game inspired by the game [The Sting!](https:/
 ### Game development
 
 * [The Cherno's Game Engine](https://www.youtube.com/watch?v=vtWdgtMo1T4&list=PLlrATfBNZ98dC-V-N3m0Go4deliWHPFwT&index=2)
+* [3D Game Development with LWJGL 3](https://lwjglgamedev.gitbooks.io/3d-game-development-with-lwjgl/content/)
 
 ### OpenGL
 
 * [OpenGL 3D Game Tutorial](https://www.youtube.com/watch?v=VS8wlS9hF8E&list=PLRIWtICgwaX0u7Rf9zkZhLoLuZVfUksDP&index=1)
 * [Learn OpenGL](https://learnopengl.com/Introduction)
-
-### Java
-
-TBD
+* [LWJGL Javadocs](https://javadoc.lwjgl.org/overview-summary.html)
