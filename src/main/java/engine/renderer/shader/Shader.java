@@ -20,11 +20,19 @@ public class Shader implements AutoCloseable {
 
     private static final Logger mLogger = Logger.create(Shader.class.getName());
 
+    // Name of the shader.
     private final String mName;
+    // Id used to reference the shader.
     private IntBuffer mRendererId;
 
+    // Map that contains all the uniforms.
     private Map<String, Integer> mUniformLocationCache;
 
+    /**
+     * Construct a shader given the path to the shaders source.
+     *
+     * @param filepath path to the shaders source.
+     */
     public Shader(final String filepath) {
         var name = new File(filepath).getName();
         name = name.substring(0, name.indexOf("."));
@@ -35,6 +43,13 @@ public class Shader implements AutoCloseable {
         compile(shaderSources);
     }
 
+    /**
+     * Construct a shader given the source of the vertex and fragment shader.
+     *
+     * @param name        name of the shader.
+     * @param vertexSrc   source of the vertex shader.
+     * @param fragmentSrc source of the fragment shader.
+     */
     public Shader(final String name, final String vertexSrc, final String fragmentSrc) {
         mName = name;
 
@@ -46,13 +61,19 @@ public class Shader implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
-        // TODO Auto-generated method stub
+        glDeleteProgram(mRendererId.get());
     }
 
+    /**
+     * Bind the shader.
+     */
     public void bind() {
         glUseProgram(mRendererId.get());
     }
 
+    /**
+     * Unbind the shader.
+     */
     public void unbind() {
         glUseProgram(0);
     }
@@ -61,22 +82,34 @@ public class Shader implements AutoCloseable {
         uploadUniformInt(name, value);
     }
 
+    public void setFloat3(final String name, final Vector3d value) {
+        uploadUniformFloat3(name, value);
+    }
+
+    public void setFloat4(final String name, final Vector4d value) {
+        uploadUniformFloat4(name, value);
+    }
+
+    public void setMat4(final String name, final Matrix4d value) {
+        uploadUniformMat4(name, value);
+    }
+
     public void uploadUniformInt(final String name, int value) {
         int location = getUniformLocation(name);
         glUniform1i(location, value);
     }
 
-    public void setFloat3(final String name, final Vector3d value) {
+    public void uploadUniformFloat3(final String name, final Vector3d value) {
         int location = getUniformLocation(name);
         glUniform3f(location, (float) value.x, (float) value.y, (float) value.z);
     }
 
-    public void setFloat4(final String name, final Vector4d value) {
+    public void uploadUniformFloat4(final String name, final Vector4d value) {
         int location = getUniformLocation(name);
         glUniform4f(location, (float) value.x, (float) value.y, (float) value.z, (float) value.w);
     }
 
-    public void setMat4(final String name, final Matrix4d value) {
+    public void uploadUniformMat4(final String name, final Matrix4d value) {
         int location = getUniformLocation(name);
         FloatBuffer fb = createFloatBuffer(16);
 
