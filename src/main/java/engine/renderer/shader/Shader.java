@@ -26,17 +26,22 @@ public class Shader implements AutoCloseable {
     private Map<String, Integer> mUniformLocationCache;
 
     public Shader(final String filepath) {
-        var source = readFile(filepath);
-        var shaderSources = preprocess(source);
-        compile(shaderSources);
-
         var name = new File(filepath).getName();
         name = name.substring(0, name.indexOf("."));
         mName = name;
+
+        var source = readFile(filepath);
+        var shaderSources = preprocess(source);
+        compile(shaderSources);
     }
 
     public Shader(final String name, final String vertexSrc, final String fragmentSrc) {
         mName = name;
+
+        Map<Integer, String> shaders = new HashMap<>();
+        shaders.put(GL_VERTEX_SHADER, vertexSrc);
+        shaders.put(GL_FRAGMENT_SHADER, fragmentSrc);
+        compile(shaders);
     }
 
     @Override
@@ -45,15 +50,15 @@ public class Shader implements AutoCloseable {
     }
 
     public void bind() {
-        // TODO Auto-generated method stub
+        glUseProgram(mRendererId.get());
     }
 
     public void unbind() {
-        // TODO Auto-generated method stub
+        glUseProgram(0);
     }
 
     public void setInt(final String name, int value) {
-        // TODO Auto-generated method stub
+        uploadUniformInt(name, value);
     }
 
     public void uploadUniformInt(final String name, int value) {
@@ -167,6 +172,79 @@ public class Shader implements AutoCloseable {
     }
 
     private void compile(final Map<Integer, String> shaderSources) {
+        // Get a program object.
+        int program = glCreateProgram();
+
+        int[] glShaderIds = new int[2];
+        int glShaderIndex = 0;
+        for (var kv : shaderSources.entrySet()) {
+            var type = kv.getKey();
+            final var source = kv.getValue();
+
+            // Create an empty vertex shader handle.
+            int shader = glCreateShader(type);
+
+            // Send the vertex shader source code to GL.
+            glShaderSource(shader, source);
+
+            // Compìle the shader.
+            glCompileShader(shader);
+
+            IntBuffer isCompiled = IntBuffer.allocate(1);
+            glGetShaderiv(shader, GL_COMPILE_STATUS, isCompiled);
+            if (isCompiled.get() == GL_FALSE) {
+                IntBuffer maxLength = IntBuffer.allocate(1);
+                glGetShaderiv(shader, GL_INFO_LOG_LENGTH, maxLength);
+
+                ByteBuffer infoLog = ByteBuffer.allocate(maxLength.get());
+                glGetShaderInfoLog(shader, maxLength, infoLog);
+
+                // We don't need the shader anymore.
+                glDeleteShader(shader);
+
+                mLogger.error(infoLog.toString());
+                assert false;
+
+                break;
+            }
+
+            // Attach our shaders to our program.
+            glAttachShader(program, shader);
+            glShaderIds[glShaderIndex++] = shader;
+        }
+
+        // Ling our program.
+        glLinkProgram(program);
+
+        IntBuffer isLinked = IntBuffer.allocate(1);
+        glGetProgramiv(program, GL_LINK_STATUS, isLinked);
+        if (isLinked.get() == GL_FALSE) {
+            IntBuffer maxLength = IntBuffer.allocate(1);
+            glGetProgramiv(program, GL_INFO_LOG_LENGTH, maxLength);
+
+            ByteBuffer infoLog = ByteBuffer.allocate(maxLength.get());
+            glGetProgramInfoLog(program, maxLength, infoLog);
+
+            // We don't need the program anymore.
+            glDeleteProgram(program);
+
+            // Don't leak the shaders either.
+            for (var id : glShaderIds) {
+                glDeleteShader(id);
+            }
+
+            mLogger.error(infoLog.toString());
+            assert false;
+
+            return;
+        }
+
+        // Always detach shaders after succesful link.
+        for (var id : glShaderIds) {
+            glDetachShader(program, id);
+        }
+
+        mRendererId = IntBuffer.allocate(1).put(program);
     }
 
     private int getUniformLocation(final String name) {
