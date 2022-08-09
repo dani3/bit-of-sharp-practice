@@ -1,5 +1,8 @@
 package engine.renderer.shader;
 
+/**
+ * Enum that abstracts the different GLSL types.
+ */
 public enum ShaderDataType {
     None,
     Float,
@@ -14,6 +17,11 @@ public enum ShaderDataType {
     Int4,
     Bool;
 
+    /**
+     * Return the size of a given GLSL type.
+     *
+     * @return size in bytes of the given GLSL type.
+     */
     public static int getSize(ShaderDataType type) {
         switch (type) {
             case Float:

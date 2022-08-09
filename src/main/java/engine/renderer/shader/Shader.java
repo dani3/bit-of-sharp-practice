@@ -16,6 +16,10 @@ import java.util.Map;
 
 import static org.lwjgl.opengl.GL20.*;
 
+/**
+ * Class that represents a GLSL shader. A shader is created by providing either
+ * a file containing the shaders source or the source as a string.
+ */
 public class Shader implements AutoCloseable {
 
     private static final Logger mLogger = Logger.create(Shader.class.getName());
@@ -29,7 +33,8 @@ public class Shader implements AutoCloseable {
     private Map<String, Integer> mUniformLocationCache;
 
     /**
-     * Construct a shader given the path to the shaders source.
+     * Construct a shader given the path to the shaders source. The constructor will
+     * compile and link the shaders.
      *
      * @param filepath path to the shaders source.
      */
@@ -44,7 +49,8 @@ public class Shader implements AutoCloseable {
     }
 
     /**
-     * Construct a shader given the source of the vertex and fragment shader.
+     * Construct a shader given the source of the vertex and fragment shader. The
+     * construct will compile and link the shaders.
      *
      * @param name        name of the shader.
      * @param vertexSrc   source of the vertex shader.
