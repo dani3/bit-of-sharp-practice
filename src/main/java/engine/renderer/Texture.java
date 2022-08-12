@@ -1,12 +1,16 @@
 package engine.renderer;
 
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
+import engine.core.Logger;
+
 import static org.lwjgl.opengl.GL45.*;
+import static org.lwjgl.stb.STBImage.*;
 
 public class Texture implements AutoCloseable {
 
-    private String mPath;
+    private static final Logger mLogger = Logger.create(Texture.class.getName());
 
     private int mHeight;
     private int mWidth;
@@ -17,12 +21,66 @@ public class Texture implements AutoCloseable {
     private int mDataFormat;
 
     public Texture(int width, int height) {
+        mInternalFormat = GL_RGBA8;
+        mDataFormat = GL_RGBA;
+
         mWidth = width;
         mHeight = height;
+
+        mRendererId = IntBuffer.allocate(1);
+
+        glCreateTextures(GL_TEXTURE_2D, mRendererId);
+        glTextureStorage2D(mRendererId.get(), 1, mInternalFormat, mWidth, mHeight);
+
+        glTextureParameteri(mRendererId.get(), GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTextureParameteri(mRendererId.get(), GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        glTextureParameteri(mRendererId.get(), GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTextureParameteri(mRendererId.get(), GL_TEXTURE_WRAP_T, GL_REPEAT);
     }
 
     public Texture(final String path) {
-        mPath = path;
+        IntBuffer width = IntBuffer.allocate(1);
+        IntBuffer height = IntBuffer.allocate(1);
+        IntBuffer channels = IntBuffer.allocate(1);
+
+        stbi_set_flip_vertically_on_load(true);
+        var data = stbi_load(path, width, height, channels, 0);
+
+        if (data == null) {
+            mLogger.error("Failed to load image");
+            assert data != null;
+        }
+
+        mWidth = width.get();
+        mHeight = height.get();
+
+        int internalFormat = 0;
+        int dataFormat = 0;
+        if (channels.get() == 4) {
+            internalFormat = GL_RGBA8;
+            dataFormat = GL_RGBA;
+        } else if (channels.get() == 3) {
+            internalFormat = GL_RGB8;
+            dataFormat = GL_RGB;
+        }
+
+        mInternalFormat = internalFormat;
+        mDataFormat = dataFormat;
+
+        glCreateTextures(GL_TEXTURE_2D, mRendererId);
+        glTextureStorage2D(mRendererId.get(), 1, mInternalFormat, mWidth, mHeight);
+
+        glTextureParameteri(mRendererId.get(), GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTextureParameteri(mRendererId.get(), GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        glTextureParameteri(mRendererId.get(), GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTextureParameteri(mRendererId.get(), GL_TEXTURE_WRAP_T, GL_REPEAT);
+
+        glTextureSubImage2D(
+                mRendererId.get(), 0, 0, 0, mWidth, mHeight, mDataFormat, GL_UNSIGNED_BYTE, data);
+
+        stbi_image_free(data);
     }
 
     public int getHeight() {
@@ -36,5 +94,17 @@ public class Texture implements AutoCloseable {
     @Override
     public void close() throws Exception {
         glDeleteTextures(mRendererId);
+    }
+
+    public void setData(ByteBuffer data, int size) {
+        int bpp = (mDataFormat == GL_RGBA) ? 4 : 3;
+
+        if (size == mWidth * mHeight * bpp) {
+            mLogger.error("Data must be entire texture");
+            assert false;
+        }
+
+        glTextureSubImage2D(
+                mRendererId.get(), 0, 0, 0, mWidth, mHeight, mDataFormat, GL_UNSIGNED_BYTE, data);
     }
 }

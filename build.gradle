@@ -16,6 +16,10 @@ repositories {
     }
 }
 
+task myJavadocs(type: Javadoc) {
+  source = sourceSets.main.allJava
+}
+
 dependencies {
     implementation 'org.jetbrains:annotations:23.0.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.0'
