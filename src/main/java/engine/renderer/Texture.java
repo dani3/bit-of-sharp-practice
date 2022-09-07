@@ -96,10 +96,10 @@ public class Texture implements AutoCloseable {
         glDeleteTextures(mRendererId);
     }
 
-    public void setData(ByteBuffer data, int size) {
+    public void setData(ByteBuffer data) {
         int bpp = (mDataFormat == GL_RGBA) ? 4 : 3;
 
-        if (size == mWidth * mHeight * bpp) {
+        if (data.capacity() == mWidth * mHeight * bpp) {
             mLogger.error("Data must be entire texture");
             assert false;
         }

@@ -9,8 +9,8 @@ public class IndexBuffer implements AutoCloseable {
     private final int mCount;
     private final IntBuffer mRendererId;
 
-    public IndexBuffer(int[] indices, int count) {
-        mCount = count;
+    public IndexBuffer(int[] indices) {
+        mCount = indices.length;
         mRendererId = IntBuffer.allocate(1);
         glCreateBuffers(mRendererId);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mRendererId.get());
@@ -24,7 +24,6 @@ public class IndexBuffer implements AutoCloseable {
     public void unbind() {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
     }
-
 
     public int getCount() {
         return mCount;
