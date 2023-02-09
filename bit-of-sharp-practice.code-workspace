@@ -15,5 +15,6 @@
 		"java.jdt.ls.java.home": "C:/Program Files/Java/jdk-16.0.2",
 		"java.configuration.updateBuildConfiguration": "automatic",
 		"java.format.enabled": true,
+		"java.jdt.ls.vmargs": "-XX:+UseParallelGC -XX:GCTimeRatio=4 -XX:AdaptiveSizePolicyWeight=90 -Dsun.zip.disableMemoryMapping=true -Xmx2G -Xms100m -Xlog:disable",
 	}
 }

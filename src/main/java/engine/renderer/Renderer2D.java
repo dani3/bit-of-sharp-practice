@@ -1,21 +1,17 @@
 package engine.renderer;
 
 import engine.core.Logger;
-import engine.renderer.buffer.BufferElement;
-import engine.renderer.buffer.BufferLayout;
-import engine.renderer.buffer.IndexBuffer;
-import engine.renderer.buffer.VertexArray;
-import engine.renderer.buffer.VertexBuffer;
+import engine.renderer.buffer.*;
 import engine.renderer.shader.Shader;
 import engine.renderer.shader.ShaderDataType;
+import org.joml.Matrix4d;
+import org.joml.Vector2d;
+import org.joml.Vector3d;
+import org.joml.Vector4d;
 
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 import java.util.Objects;
-
-import org.joml.Vector2d;
-import org.joml.Vector3d;
-import org.joml.Vector4d;
 
 public class Renderer2D {
 
@@ -38,17 +34,17 @@ public class Renderer2D {
         VertexBuffer squareVertexBuffer = new VertexBuffer(squareVertices);
         BufferElement[] elements = {
                 new BufferElement("a_Position", ShaderDataType.Float3),
-                new BufferElement("a_TexCoord", ShaderDataType.Float2) };
+                new BufferElement("a_TexCoord", ShaderDataType.Float2)};
         BufferLayout squareLayout = new BufferLayout(Arrays.asList(elements));
         squareVertexBuffer.setLayout(squareLayout);
 
         mQuadVertexArray.addVertexBuffer(squareVertexBuffer);
-        int[] squareIndices = { 0, 1, 2, 2, 3, 0 };
+        int[] squareIndices = {0, 1, 2, 2, 3, 0};
         IndexBuffer squareIndexBuffer = new IndexBuffer(squareIndices);
         mQuadVertexArray.setIndexBuffer(squareIndexBuffer);
 
         mWhiteTexture = new Texture(1, 1);
-        byte[] buffer = { (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF };
+        byte[] buffer = {(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
         ByteBuffer whiteTextureData = ByteBuffer.wrap(buffer);
         mWhiteTexture.setData(whiteTextureData);
 
@@ -76,13 +72,35 @@ public class Renderer2D {
     // Primitives
     // --------------------------------------------------------------------------------------------
 
-    public static void drawQuad(
-            final Vector2d position, final Vector2d size, final Vector4d color) {
-        // TODO
+    public static void drawQuad(final Vector2d position, final Vector2d size, final Vector4d color) {
+        Renderer2D.drawQuad(new Vector3d(position.x, position.y, 0.0f), size, color);
     }
 
-    public static void drawQuad(
-            final Vector3d position, final Vector2d size, final Vector4d color) {
-        // TODO
+    public static void drawQuad(final Vector3d position, final Vector2d size, final Vector4d color) {
+        mTextureShader.setFloat4("u_Color", new Vector4d(1.0f));
+        mWhiteTexture.bind(0);
+
+        Matrix4d scale = new Matrix4d().identity().scale(new Vector3d(position.x, position.y, 1.0f));
+        Matrix4d transform = new Matrix4d().identity().translate(position).mul(scale);
+        mTextureShader.setMat4("u_Transform", transform);
+
+        mQuadVertexArray.bind();
+        RenderCommand.drawIndexed(mQuadVertexArray);
+    }
+
+    public static void drawQuad(final Vector2d position, final Vector2d size, final Texture texture) {
+        Renderer2D.drawQuad(new Vector3d(position.x, position.y, 0.0f), size, texture);
+    }
+
+    public static void drawQuad(final Vector3d position, final Vector2d size, final Texture texture) {
+        mTextureShader.setFloat4("u_Color", new Vector4d(1.0f));
+        texture.bind(0);
+
+        Matrix4d scale = new Matrix4d().identity().scale(new Vector3d(position.x, position.y, 1.0f));
+        Matrix4d transform = new Matrix4d().identity().translate(position).mul(scale);
+        mTextureShader.setMat4("u_Transform", transform);
+
+        mQuadVertexArray.bind();
+        RenderCommand.drawIndexed(mQuadVertexArray);
     }
 }

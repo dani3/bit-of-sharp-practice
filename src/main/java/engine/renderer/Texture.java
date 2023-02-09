@@ -1,9 +1,9 @@
 package engine.renderer;
 
+import engine.core.Logger;
+
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-
-import engine.core.Logger;
 
 import static org.lwjgl.opengl.GL45.*;
 import static org.lwjgl.stb.STBImage.*;
@@ -106,5 +106,9 @@ public class Texture implements AutoCloseable {
 
         glTextureSubImage2D(
                 mRendererId.get(), 0, 0, 0, mWidth, mHeight, mDataFormat, GL_UNSIGNED_BYTE, data);
+    }
+
+    public void bind(int slot) {
+        glBindTextureUnit(slot, mRendererId.get());
     }
 }

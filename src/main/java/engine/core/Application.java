@@ -4,6 +4,7 @@ import engine.events.Event;
 import engine.events.IEventListener;
 import engine.events.WindowClosedEvent;
 import engine.events.WindowResizedEvent;
+import engine.renderer.Renderer;
 
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
@@ -15,6 +16,8 @@ public class Application implements IEventListener {
 
     private final Window mWindow;
     private final LayerStack mLayers = new LayerStack();
+
+    private final Renderer mRenderer;
     private boolean mRunning = true;
     private boolean mMinimized = false;
     private float mLastFrameTime = 0.0f;
@@ -23,7 +26,7 @@ public class Application implements IEventListener {
         sInstance = this;
         mWindow = window;
 
-        // TODO initialize renderer.
+        mRenderer = new Renderer();
 
         mWindow.addOnEventListener(this);
     }
@@ -95,8 +98,7 @@ public class Application implements IEventListener {
         }
 
         mMinimized = false;
-
-        // TODO Renderer.onWindowResized()
+        mRenderer.onEvent(event);
 
         return false;
     }

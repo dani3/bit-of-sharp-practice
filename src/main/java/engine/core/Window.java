@@ -10,6 +10,7 @@ import engine.events.MouseMovedEvent;
 import engine.events.MouseScrolledEvent;
 import engine.events.WindowClosedEvent;
 import engine.events.WindowResizedEvent;
+import engine.renderer.GraphicsContext;
 
 import java.text.MessageFormat;
 
@@ -20,7 +21,9 @@ public class Window implements AutoCloseable {
 
     private static final Logger mLogger = Logger.create(Window.class.getName());
 
-    private IEventListener mListener;;
+    private IEventListener mListener;
+
+    private GraphicsContext mContext;
 
     private long mWindow;
 
@@ -91,7 +94,8 @@ public class Window implements AutoCloseable {
         mWindow = glfwCreateWindow(
                 mData.width, mData.height, mData.title, 0, 0);
 
-        // TODO OpenGLContext
+        mContext = new GraphicsContext(mWindow);
+        mContext.init();
 
         setVSync(true);
 
