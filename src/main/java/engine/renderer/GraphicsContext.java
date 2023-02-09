@@ -2,6 +2,7 @@ package engine.renderer;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL.*;
 
 import java.text.MessageFormat;
 
@@ -19,6 +20,7 @@ public class GraphicsContext {
 
     public void init() {
         glfwMakeContextCurrent(mWindowHandle);
+        createCapabilities();
 
         mLogger.info("OpenGL Info:");
         mLogger.info(MessageFormat.format("  Vendor: {0}", glGetString(GL_VENDOR)));
