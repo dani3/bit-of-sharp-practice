@@ -15,7 +15,7 @@ public class Texture implements AutoCloseable {
     private int mHeight;
     private int mWidth;
 
-    private IntBuffer mRendererId;
+    private final int mRendererId;
 
     private int mInternalFormat;
     private int mDataFormat;
@@ -27,16 +27,14 @@ public class Texture implements AutoCloseable {
         mWidth = width;
         mHeight = height;
 
-        mRendererId = IntBuffer.allocate(1);
+        mRendererId = glCreateTextures(GL_TEXTURE_2D);
+        glTextureStorage2D(mRendererId, 1, mInternalFormat, mWidth, mHeight);
 
-        glCreateTextures(GL_TEXTURE_2D, mRendererId);
-        glTextureStorage2D(mRendererId.get(), 1, mInternalFormat, mWidth, mHeight);
+        glTextureParameteri(mRendererId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTextureParameteri(mRendererId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-        glTextureParameteri(mRendererId.get(), GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTextureParameteri(mRendererId.get(), GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-        glTextureParameteri(mRendererId.get(), GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTextureParameteri(mRendererId.get(), GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTextureParameteri(mRendererId, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTextureParameteri(mRendererId, GL_TEXTURE_WRAP_T, GL_REPEAT);
     }
 
     public Texture(final String path) {
@@ -68,17 +66,17 @@ public class Texture implements AutoCloseable {
         mInternalFormat = internalFormat;
         mDataFormat = dataFormat;
 
-        glCreateTextures(GL_TEXTURE_2D, mRendererId);
-        glTextureStorage2D(mRendererId.get(), 1, mInternalFormat, mWidth, mHeight);
+        mRendererId = glCreateTextures(GL_TEXTURE_2D);
+        glTextureStorage2D(mRendererId, 1, mInternalFormat, mWidth, mHeight);
 
-        glTextureParameteri(mRendererId.get(), GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTextureParameteri(mRendererId.get(), GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTextureParameteri(mRendererId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTextureParameteri(mRendererId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-        glTextureParameteri(mRendererId.get(), GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTextureParameteri(mRendererId.get(), GL_TEXTURE_WRAP_T, GL_REPEAT);
+        glTextureParameteri(mRendererId, GL_TEXTURE_WRAP_S, GL_REPEAT);
+        glTextureParameteri(mRendererId, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
         glTextureSubImage2D(
-                mRendererId.get(), 0, 0, 0, mWidth, mHeight, mDataFormat, GL_UNSIGNED_BYTE, data);
+                mRendererId, 0, 0, 0, mWidth, mHeight, mDataFormat, GL_UNSIGNED_BYTE, data);
 
         stbi_image_free(data);
     }
@@ -99,16 +97,16 @@ public class Texture implements AutoCloseable {
     public void setData(ByteBuffer data) {
         int bpp = (mDataFormat == GL_RGBA) ? 4 : 3;
 
-        if (data.capacity() == mWidth * mHeight * bpp) {
+        if (data.capacity() < mWidth * mHeight * bpp) {
             mLogger.error("Data must be entire texture");
             assert false;
         }
 
         glTextureSubImage2D(
-                mRendererId.get(), 0, 0, 0, mWidth, mHeight, mDataFormat, GL_UNSIGNED_BYTE, data);
+                mRendererId, 0, 0, 0, mWidth, mHeight, mDataFormat, GL_UNSIGNED_BYTE, data);
     }
 
     public void bind(int slot) {
-        glBindTextureUnit(slot, mRendererId.get());
+        glBindTextureUnit(slot, mRendererId);
     }
 }

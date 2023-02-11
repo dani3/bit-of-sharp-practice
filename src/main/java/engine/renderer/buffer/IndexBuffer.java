@@ -1,24 +1,21 @@
 package engine.renderer.buffer;
 
-import java.nio.IntBuffer;
-
 import static org.lwjgl.opengl.GL45.*;
 
 public class IndexBuffer implements AutoCloseable {
 
     private final int mCount;
-    private final IntBuffer mRendererId;
+    private final int mRendererId;
 
     public IndexBuffer(int[] indices) {
         mCount = indices.length;
-        mRendererId = IntBuffer.allocate(1);
-        glCreateBuffers(mRendererId);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mRendererId.get());
+        mRendererId = glCreateBuffers();
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mRendererId);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
     }
 
     public void bind() {
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mRendererId.get());
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mRendererId);
     }
 
     public void unbind() {
@@ -31,6 +28,6 @@ public class IndexBuffer implements AutoCloseable {
 
     @Override
     public void close() {
-        glDeleteBuffers(mRendererId.get());
+        glDeleteBuffers(mRendererId);
     }
 }

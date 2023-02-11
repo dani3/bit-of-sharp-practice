@@ -94,6 +94,7 @@ public class Window implements AutoCloseable {
         mWindow = glfwCreateWindow(
                 mData.width, mData.height, mData.title, 0, 0);
 
+        // After this point it's safe to use OpenGL.
         mContext = new GraphicsContext(mWindow);
         mContext.init();
 

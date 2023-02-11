@@ -2,7 +2,6 @@ package engine.renderer.buffer;
 
 import engine.renderer.shader.ShaderDataType;
 
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,16 +13,15 @@ public class VertexArray implements AutoCloseable {
 
     private final List<VertexBuffer> mVertexBuffers;
     private IndexBuffer mIndexBuffer;
-    private final IntBuffer mRendererId;
+    private final int mRendererId;
 
     public VertexArray() {
         mVertexBuffers = new ArrayList<>();
-        mRendererId = IntBuffer.allocate(1);
-        glGenVertexArrays(mRendererId);
+        mRendererId = glGenVertexArrays();
     }
 
     public void bind() {
-        glBindVertexArray(mRendererId.get());
+        glBindVertexArray(mRendererId);
     }
 
     public void unbind() {
@@ -33,7 +31,7 @@ public class VertexArray implements AutoCloseable {
     public void addVertexBuffer(VertexBuffer vertexBuffer) {
         assert vertexBuffer.getLayout().getElements().size() > 0;
 
-        glBindVertexArray(mRendererId.get());
+        glBindVertexArray(mRendererId);
         vertexBuffer.bind();
         var index = 0;
         var layout = vertexBuffer.getLayout();

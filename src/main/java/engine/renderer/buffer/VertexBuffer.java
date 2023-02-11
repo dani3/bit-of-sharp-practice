@@ -1,23 +1,20 @@
 package engine.renderer.buffer;
 
-import java.nio.IntBuffer;
-
 import static org.lwjgl.opengl.GL45.*;
 
 public class VertexBuffer implements AutoCloseable {
 
     private BufferLayout mLayout;
-    private final IntBuffer mRendererId;
+    private final int mRendererId;
 
     public VertexBuffer(float[] vertices) {
-        mRendererId = IntBuffer.allocate(1);
-        glCreateBuffers(mRendererId);
-        glBindBuffer(GL_ARRAY_BUFFER, mRendererId.get());
+        mRendererId = glCreateBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, mRendererId);
         glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
     }
 
     public void bind() {
-        glBindBuffer(GL_ARRAY_BUFFER, mRendererId.get());
+        glBindBuffer(GL_ARRAY_BUFFER, mRendererId);
     }
 
     public void unbind() {
@@ -34,6 +31,6 @@ public class VertexBuffer implements AutoCloseable {
 
     @Override
     public void close() {
-        glDeleteBuffers(mRendererId.get());
+        glDeleteBuffers(mRendererId);
     }
 }

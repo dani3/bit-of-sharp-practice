@@ -34,18 +34,19 @@ public class Renderer2D {
         VertexBuffer squareVertexBuffer = new VertexBuffer(squareVertices);
         BufferElement[] elements = {
                 new BufferElement("a_Position", ShaderDataType.Float3),
-                new BufferElement("a_TexCoord", ShaderDataType.Float2)};
+                new BufferElement("a_TexCoord", ShaderDataType.Float2) };
         BufferLayout squareLayout = new BufferLayout(Arrays.asList(elements));
         squareVertexBuffer.setLayout(squareLayout);
 
         mQuadVertexArray.addVertexBuffer(squareVertexBuffer);
-        int[] squareIndices = {0, 1, 2, 2, 3, 0};
+        int[] squareIndices = { 0, 1, 2, 2, 3, 0 };
         IndexBuffer squareIndexBuffer = new IndexBuffer(squareIndices);
         mQuadVertexArray.setIndexBuffer(squareIndexBuffer);
 
         mWhiteTexture = new Texture(1, 1);
-        byte[] buffer = {(byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF};
-        ByteBuffer whiteTextureData = ByteBuffer.wrap(buffer);
+        byte[] buffer = { (byte) 0xFF, (byte) 0xFF, (byte) 0xFF, (byte) 0xFF };
+        ByteBuffer whiteTextureData = ByteBuffer.allocateDirect(buffer.length);
+        whiteTextureData.put(buffer);
         mWhiteTexture.setData(whiteTextureData);
 
         var shaderPath = Objects.requireNonNull(
