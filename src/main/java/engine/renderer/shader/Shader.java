@@ -27,10 +27,10 @@ public class Shader implements AutoCloseable {
     // Name of the shader.
     private final String mName;
     // Id used to reference the shader.
-    private IntBuffer mRendererId;
+    private int mRendererId;
 
     // Map that contains all the uniforms.
-    private Map<String, Integer> mUniformLocationCache;
+    private Map<String, Integer> mUniformLocationCache = new HashMap<>();
 
     /**
      * Construct a shader given the path to the shaders source. The constructor will
@@ -67,14 +67,14 @@ public class Shader implements AutoCloseable {
 
     @Override
     public void close() throws Exception {
-        glDeleteProgram(mRendererId.get());
+        glDeleteProgram(mRendererId);
     }
 
     /**
      * Bind the shader.
      */
     public void bind() {
-        glUseProgram(mRendererId.get());
+        glUseProgram(mRendererId);
     }
 
     /**
@@ -229,13 +229,13 @@ public class Shader implements AutoCloseable {
             // Compìle the shader.
             glCompileShader(shader);
 
-            IntBuffer isCompiled = IntBuffer.allocate(1);
+            IntBuffer isCompiled = ByteBuffer.allocateDirect(4).asIntBuffer();
             glGetShaderiv(shader, GL_COMPILE_STATUS, isCompiled);
             if (isCompiled.get() == GL_FALSE) {
-                IntBuffer maxLength = IntBuffer.allocate(1);
+                IntBuffer maxLength = ByteBuffer.allocateDirect(4).asIntBuffer();
                 glGetShaderiv(shader, GL_INFO_LOG_LENGTH, maxLength);
 
-                ByteBuffer infoLog = ByteBuffer.allocate(maxLength.get());
+                ByteBuffer infoLog = ByteBuffer.allocateDirect(maxLength.get());
                 glGetShaderInfoLog(shader, maxLength, infoLog);
 
                 // We don't need the shader anymore.
@@ -255,13 +255,13 @@ public class Shader implements AutoCloseable {
         // Ling our program.
         glLinkProgram(program);
 
-        IntBuffer isLinked = IntBuffer.allocate(1);
+        IntBuffer isLinked = ByteBuffer.allocateDirect(4).asIntBuffer();
         glGetProgramiv(program, GL_LINK_STATUS, isLinked);
         if (isLinked.get() == GL_FALSE) {
-            IntBuffer maxLength = IntBuffer.allocate(1);
+            IntBuffer maxLength = ByteBuffer.allocateDirect(4).asIntBuffer();
             glGetProgramiv(program, GL_INFO_LOG_LENGTH, maxLength);
 
-            ByteBuffer infoLog = ByteBuffer.allocate(maxLength.get());
+            ByteBuffer infoLog = ByteBuffer.allocateDirect(maxLength.get());
             glGetProgramInfoLog(program, maxLength, infoLog);
 
             // We don't need the program anymore.
@@ -283,7 +283,7 @@ public class Shader implements AutoCloseable {
             glDetachShader(program, id);
         }
 
-        mRendererId = IntBuffer.allocate(1).put(program);
+        mRendererId = program;
     }
 
     private int getUniformLocation(final String name) {
@@ -291,7 +291,7 @@ public class Shader implements AutoCloseable {
             return mUniformLocationCache.get(name);
         }
 
-        int location = glGetUniformLocation(mRendererId.get(), name);
+        int location = glGetUniformLocation(mRendererId, name);
         if (location == -1) {
             mLogger.error(MessageFormat.format(
                     "Uniform {0} not found", name));

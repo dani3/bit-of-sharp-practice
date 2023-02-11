@@ -12,7 +12,7 @@ public class Sandbox extends Application {
 
     public Sandbox() {
         super(new Window(
-                new WindowProps("Sandbox", 800, 600)));
+                new WindowProps("Sandbox", 1280, 800)));
         pushLayer(new Sandbox3D());
     }
 }

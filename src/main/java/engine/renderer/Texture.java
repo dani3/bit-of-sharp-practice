@@ -38,9 +38,9 @@ public class Texture implements AutoCloseable {
     }
 
     public Texture(final String path) {
-        IntBuffer width = IntBuffer.allocate(1);
-        IntBuffer height = IntBuffer.allocate(1);
-        IntBuffer channels = IntBuffer.allocate(1);
+        IntBuffer width = ByteBuffer.allocateDirect(4).asIntBuffer();
+        IntBuffer height = ByteBuffer.allocateDirect(4).asIntBuffer();
+        IntBuffer channels = ByteBuffer.allocateDirect(4).asIntBuffer();
 
         stbi_set_flip_vertically_on_load(true);
         var data = stbi_load(path, width, height, channels, 0);
