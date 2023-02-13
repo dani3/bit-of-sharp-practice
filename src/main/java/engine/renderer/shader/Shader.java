@@ -278,7 +278,7 @@ public class Shader implements AutoCloseable {
             return;
         }
 
-        // Always detach shaders after succesful link.
+        // Always detach shaders after successful link.
         for (var id : glShaderIds) {
             glDetachShader(program, id);
         }
@@ -293,8 +293,7 @@ public class Shader implements AutoCloseable {
 
         int location = glGetUniformLocation(mRendererId, name);
         if (location == -1) {
-            mLogger.error(MessageFormat.format(
-                    "Uniform {0} not found", name));
+            mLogger.error(MessageFormat.format("Uniform {0} not found", name));
             return location;
         }
 

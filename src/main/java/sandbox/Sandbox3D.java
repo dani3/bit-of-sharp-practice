@@ -47,5 +47,5 @@ public class Sandbox3D extends Layer {
     @Override
     public void onEvent(Event event) {
         mCameraController.onEvent(event);
-    }
+    } 
 }
