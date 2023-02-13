@@ -68,7 +68,7 @@ public class Window implements AutoCloseable {
 
     public void onUpdate() {
         glfwPollEvents();
-        // TODO context
+        mContext.swapBuffers();
     }
 
     public long getNativeWindow() {
