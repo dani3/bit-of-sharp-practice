@@ -34,7 +34,7 @@ public class OthographicCameraController implements IEventListener {
 
         mZoomLevel = 1.0f;
         mCameraPosition = new Vector3d();
-        mCameraTranslationSpeed = 5.0f;
+        mCameraTranslationSpeed = 2.0f;
         mCameraRotationSpeed = 180.0f;
 
         mCamera = new OrthographicCamera(

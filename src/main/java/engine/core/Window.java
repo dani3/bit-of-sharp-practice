@@ -105,6 +105,8 @@ public class Window implements AutoCloseable {
         glfwSetWindowSizeCallback(mWindow, new GLFWWindowSizeCallback() {
             @Override
             public void invoke(long window, int width, int height) {
+                mLogger.info(MessageFormat.format("Window resized: {0}x{1}", width, height));
+
                 mData.width = width;
                 mData.height = height;
 
@@ -116,6 +118,7 @@ public class Window implements AutoCloseable {
         glfwSetWindowCloseCallback(mWindow, new GLFWWindowCloseCallback() {
             @Override
             public void invoke(long window) {
+                mLogger.info("Window closed");
                 WindowClosedEvent event = new WindowClosedEvent();
                 mListener.onEvent(event);
             }
@@ -124,6 +127,7 @@ public class Window implements AutoCloseable {
         glfwSetCharCallback(mWindow, new GLFWCharCallback() {
             @Override
             public void invoke(long window, int codepoint) {
+                mLogger.info(MessageFormat.format("Key typed: {0}", codepoint));
                 KeyTypedEvent event = new KeyTypedEvent(codepoint);
                 mListener.onEvent(event);
             }
@@ -134,16 +138,19 @@ public class Window implements AutoCloseable {
             public void invoke(long window, int key, int scancode, int action, int mods) {
                 switch (action) {
                     case GLFW_PRESS: {
+                        mLogger.info(MessageFormat.format("Key pressed: {0}", key));
                         KeyPressedEvent event = new KeyPressedEvent(key, 0);
                         mListener.onEvent(event);
                         break;
                     }
                     case GLFW_RELEASE: {
+                        mLogger.info(MessageFormat.format("Key released: {0}", key));
                         KeyReleasedEvent event = new KeyReleasedEvent(key);
                         mListener.onEvent(event);
                         break;
                     }
                     case GLFW_REPEAT: {
+                        mLogger.info(MessageFormat.format("Key pressed multiple times: {0}", key));
                         KeyPressedEvent event = new KeyPressedEvent(key, 1);
                         mListener.onEvent(event);
                         break;
@@ -157,11 +164,13 @@ public class Window implements AutoCloseable {
             public void invoke(long window, int button, int action, int mods) {
                 switch (action) {
                     case GLFW_PRESS: {
+                        mLogger.info(MessageFormat.format("Mouse button pressed: {0}", button));
                         MouseButtonPressedEvent event = new MouseButtonPressedEvent(button);
                         mListener.onEvent(event);
                         break;
                     }
                     case GLFW_RELEASE: {
+                        mLogger.info(MessageFormat.format("Mouse button released: {0}", button));
                         MouseButtonReleasedEvent event = new MouseButtonReleasedEvent(button);
                         mListener.onEvent(event);
                         break;
@@ -173,6 +182,7 @@ public class Window implements AutoCloseable {
         glfwSetScrollCallback(mWindow, new GLFWScrollCallback() {
             @Override
             public void invoke(long window, double xoffset, double yoffset) {
+                mLogger.info(MessageFormat.format("Mouse scroll: ({0}, {1})", xoffset, yoffset));
                 MouseScrolledEvent event = new MouseScrolledEvent((float) xoffset, (float) yoffset);
                 mListener.onEvent(event);
             }
@@ -181,6 +191,7 @@ public class Window implements AutoCloseable {
         glfwSetCursorPosCallback(mWindow, new GLFWCursorPosCallback() {
             @Override
             public void invoke(long window, double xpos, double ypos) {
+                mLogger.info(MessageFormat.format("Mouse moved: ({0}, {1})", xpos, ypos));
                 MouseMovedEvent event = new MouseMovedEvent((float) xpos, (float) ypos);
                 mListener.onEvent(event);
             }

@@ -22,13 +22,11 @@ public class Sandbox3D extends Layer {
     @Override
     public void onAttach() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
     public void onDettach() {
         // TODO Auto-generated method stub
-
     }
 
     @Override
@@ -39,13 +37,12 @@ public class Sandbox3D extends Layer {
         RenderCommand.clear();
 
         Renderer2D.beginScene(mCameraController.getCamera());
-        Renderer2D.drawQuad(new Vector2d(-1.0f, 0.0f), new Vector2d(0.8f, 0.8f), new Vector4d(0.8f, 0.2f, 0.3f, 1.0f));
-        Renderer2D.drawQuad(new Vector2d(0.5f, -0.5f), new Vector2d(0.5f, 1.0f), new Vector4d(0.2f, 0.2f, 0.3f, 1.0f));
+        Renderer2D.drawQuad(new Vector2d(0.5f, 0.5f), new Vector2d(0.5f, 1.0f), new Vector4d(0.7f, 0.5f, 0.3f, 1.0f));
         Renderer2D.endScene();
     }
 
     @Override
     public void onEvent(Event event) {
         mCameraController.onEvent(event);
-    } 
+    }
 }
