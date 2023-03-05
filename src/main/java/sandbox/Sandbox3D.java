@@ -37,7 +37,7 @@ public class Sandbox3D extends Layer {
         RenderCommand.clear();
 
         Renderer2D.beginScene(mCameraController.getCamera());
-        Renderer2D.drawQuad(new Vector2d(0.5f, 0.5f), new Vector2d(0.5f, 1.0f), new Vector4d(0.7f, 0.5f, 0.3f, 1.0f));
+        Renderer2D.drawQuad(new Vector2d(0.5f, 0.5f), new Vector2d(0.5f, 1.0f), new Vector4d(0.1f, 0.9f, 0.3f, 1.0f));
         Renderer2D.endScene();
     }
 
