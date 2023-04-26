@@ -60,6 +60,7 @@ public class OrthographicCamera {
         Matrix4d transform = translation.mul(rotation);
 
         mViewMatrix = transform.invert();
-        mViewProjectionMatrix = mProjectionMatrix.mul(mViewMatrix);
+        Matrix4d projectionMatrix = new Matrix4d(mProjectionMatrix);
+        mViewProjectionMatrix = projectionMatrix.mul(mViewMatrix);
     }
 }

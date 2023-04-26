@@ -1,28 +1,30 @@
 package engine.renderer;
 
-import org.joml.Vector3d;
-
 import engine.core.Input;
 import engine.core.KeyCodes;
+import engine.core.Logger;
 import engine.core.Timestep;
 import engine.events.Event;
 import engine.events.IEventListener;
 import engine.events.MouseScrolledEvent;
 import engine.events.WindowResizedEvent;
+import org.joml.Vector3d;
 
 public class OthographicCameraController implements IEventListener {
+
+    private static final Logger mLogger = Logger.create(Renderer.class.getName());
 
     private float mZoomLevel;
     private float mAspectRatio;
 
-    private boolean mRotation;
-    private OrthographicCamera mCamera;
+    private final boolean mRotation;
+    private final OrthographicCamera mCamera;
 
-    private Vector3d mCameraPosition;
+    private final Vector3d mCameraPosition;
     private float mCameraRotation;
 
     private float mCameraTranslationSpeed;
-    private float mCameraRotationSpeed;
+    private final float mCameraRotationSpeed;
 
     public OthographicCameraController(float aspectRatio) {
         this(aspectRatio, false);
@@ -34,7 +36,7 @@ public class OthographicCameraController implements IEventListener {
 
         mZoomLevel = 1.0f;
         mCameraPosition = new Vector3d();
-        mCameraTranslationSpeed = 2.0f;
+        mCameraTranslationSpeed = 0.5f;
         mCameraRotationSpeed = 180.0f;
 
         mCamera = new OrthographicCamera(
@@ -43,15 +45,15 @@ public class OthographicCameraController implements IEventListener {
 
     public void onUpdate(Timestep ts) {
         if (Input.isKeyPressed(KeyCodes.KEY_A)) {
-            mCameraPosition.x -= mCameraTranslationSpeed * ts.getSeconds();
-        } else if (Input.isKeyPressed(KeyCodes.KEY_D)) {
             mCameraPosition.x += mCameraTranslationSpeed * ts.getSeconds();
+        } else if (Input.isKeyPressed(KeyCodes.KEY_D)) {
+            mCameraPosition.x -= mCameraTranslationSpeed * ts.getSeconds();
         }
 
         if (Input.isKeyPressed(KeyCodes.KEY_W)) {
             mCameraPosition.y -= mCameraTranslationSpeed * ts.getSeconds();
         } else if (Input.isKeyPressed(KeyCodes.KEY_S)) {
-            mCameraPosition.y -= mCameraTranslationSpeed * ts.getSeconds();
+            mCameraPosition.y += mCameraTranslationSpeed * ts.getSeconds();
         }
 
         if (mRotation) {
