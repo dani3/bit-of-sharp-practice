@@ -22,7 +22,6 @@ public class Window implements AutoCloseable {
     private static final Logger mLogger = Logger.create(Window.class.getName());
 
     private IEventListener mListener;
-
     private GraphicsContext mContext;
 
     private long mWindow;

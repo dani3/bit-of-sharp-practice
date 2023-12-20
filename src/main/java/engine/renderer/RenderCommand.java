@@ -4,6 +4,7 @@ import engine.renderer.buffer.VertexArray;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import org.jetbrains.annotations.NotNull;
 import org.joml.Vector4d;
 
 public class RenderCommand {
@@ -19,7 +20,7 @@ public class RenderCommand {
         glViewport(x, y, width, height);
     }
 
-    public static void setClearColor(final Vector4d color) {
+    public static void setClearColor(final @NotNull Vector4d color) {
         glClearColor((float) color.x, (float) color.y, (float) color.z, (float) color.w);
     }
 
@@ -27,7 +28,7 @@ public class RenderCommand {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public static void drawIndexed(final VertexArray vertexArray) {
+    public static void drawIndexed(final @NotNull VertexArray vertexArray) {
         glDrawElements(GL_TRIANGLES, vertexArray.getIndexBuffer().getCount(), GL_UNSIGNED_INT, 0);
         glBindTexture(GL_TEXTURE_2D, 0);
     }

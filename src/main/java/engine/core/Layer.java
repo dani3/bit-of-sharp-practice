@@ -17,7 +17,7 @@ public abstract class Layer implements IEventListener {
 
     public abstract void onAttach();
 
-    public abstract void onDettach();
+    public abstract void onDetach();
 
     public abstract void onUpdate(Timestep ts);
 
@@ -27,9 +27,7 @@ public abstract class Layer implements IEventListener {
     @Override
     public boolean equals(Object other) {
         if (other instanceof Layer layer) {
-            if (layer.mDebugName == mDebugName) {
-                return true;
-            }
+            return layer.mDebugName.equals(mDebugName);
         }
 
         return false;

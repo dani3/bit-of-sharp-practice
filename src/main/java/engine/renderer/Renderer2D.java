@@ -4,11 +4,13 @@ import engine.core.Logger;
 import engine.renderer.buffer.*;
 import engine.renderer.shader.Shader;
 import engine.renderer.shader.ShaderDataType;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4d;
 import org.joml.Vector2d;
 import org.joml.Vector3d;
 import org.joml.Vector4d;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -23,15 +25,17 @@ public class Renderer2D {
         mQuadVertexArray = new VertexArray();
 
         float[] squareVertices = {
-                -0.5f, -0.5f, 0.0f,
-                0.5f, -0.5f, 0.0f,
-                0.5f, 0.5f, 0.0f,
-                -0.5f, 0.5f, 0.0f,
+                // Positions         // Texture coords
+                -0.5f, -0.5f, 0.0f,   1.0f, 1.0f,
+                 0.5f, -0.5f, 0.0f,   1.0f, 0.0f,
+                 0.5f,  0.5f, 0.0f,   0.0f, 0.0f,
+                -0.5f,  0.5f, 0.0f,   0.0f, 1.0f,
         };
 
         var squareVertexBuffer = new VertexBuffer(squareVertices);
         BufferElement[] elements = {
-                new BufferElement("a_Position", ShaderDataType.Float3)
+                new BufferElement("a_Position", ShaderDataType.Float3),
+                new BufferElement("a_TexCoord", ShaderDataType.Float2),
         };
         var squareLayout = new BufferLayout(Arrays.asList(elements));
         squareVertexBuffer.setLayout(squareLayout);
@@ -43,16 +47,18 @@ public class Renderer2D {
 
         var shaderPath = Objects.requireNonNull(
                 Objects.requireNonNull(
-                        Renderer2D.class.getClassLoader().getResource("shaders/FlatColor.glsl")).getPath());
+                        Renderer2D.class.getClassLoader().getResource("shaders/Texture.glsl")).getPath());
         mTextureShader = new Shader(shaderPath);
+
         mTextureShader.bind();
+        mTextureShader.uploadUniformInt("u_Texture", 0);
     }
 
     public static void shutdown() {
         // TODO
     }
 
-    public static void beginScene(final OrthographicCamera camera) {
+    public static void beginScene(final @NotNull OrthographicCamera camera) {
         mTextureShader.bind();
         mTextureShader.setMat4("u_ViewProjection", camera.getViewProjectionMatrix());
     }
@@ -64,11 +70,11 @@ public class Renderer2D {
     // Primitives
     // --------------------------------------------------------------------------------------------
 
-    public static void drawQuad(final Vector2d position, final Vector2d size, final Vector4d color) {
+    public static void drawQuad(final @NotNull Vector2d position, final Vector2d size, final Vector4d color) {
         Renderer2D.drawQuad(new Vector3d(position.x, position.y, 0.0f), size, color);
     }
 
-    public static void drawQuad(final Vector3d position, final Vector2d size, final Vector4d color) {
+    public static void drawQuad(final @NotNull Vector3d position, final Vector2d size, final Vector4d color) {
         mTextureShader.setFloat4("u_Color", new Vector4d(1.0f));
 
         Matrix4d scale = new Matrix4d().identity().scale(new Vector3d(position.x, position.y, 1.0f));
@@ -79,11 +85,11 @@ public class Renderer2D {
         RenderCommand.drawIndexed(mQuadVertexArray);
     }
 
-    public static void drawQuad(final Vector2d position, final Vector2d size, final Texture texture) {
+    public static void drawQuad(final @NotNull Vector2d position, final Vector2d size, final Texture texture) {
         Renderer2D.drawQuad(new Vector3d(position.x, position.y, 0.0f), size, texture);
     }
 
-    public static void drawQuad(final Vector3d position, final Vector2d size, final Texture texture) {
+    public static void drawQuad(final @NotNull Vector3d position, final Vector2d size, final @NotNull Texture texture) {
         mTextureShader.setFloat4("u_Color", new Vector4d(1.0f));
         texture.bind(0);
 

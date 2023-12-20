@@ -1,5 +1,7 @@
 package sandbox;
 
+import engine.core.Logger;
+import engine.renderer.Texture;
 import org.joml.Vector2d;
 import org.joml.Vector4d;
 
@@ -10,9 +12,16 @@ import engine.renderer.OthographicCameraController;
 import engine.renderer.RenderCommand;
 import engine.renderer.Renderer2D;
 
+import java.io.IOException;
+import java.util.Objects;
+
 public class Sandbox3D extends Layer {
 
-    private OthographicCameraController mCameraController;
+    private static final Logger mLogger = Logger.create(Sandbox3D.class.getName());
+
+    private final OthographicCameraController mCameraController;
+
+    private static Texture mTexture;
 
     public Sandbox3D() {
         super("Sandbox3D");
@@ -21,11 +30,18 @@ public class Sandbox3D extends Layer {
 
     @Override
     public void onAttach() {
-        // TODO Auto-generated method stub
+        try {
+            mTexture = new Texture(
+                    Objects.requireNonNull(
+                            Renderer2D.class.getClassLoader().getResource("textures/Checkerboard.png")).getPath().replaceFirst("/", ""));
+        } catch (IOException e) {
+            mLogger.error("Failed to load texture");
+            assert(false);
+        }
     }
 
     @Override
-    public void onDettach() {
+    public void onDetach() {
         // TODO Auto-generated method stub
     }
 
@@ -37,7 +53,7 @@ public class Sandbox3D extends Layer {
         RenderCommand.clear();
 
         Renderer2D.beginScene(mCameraController.getCamera());
-        Renderer2D.drawQuad(new Vector2d(0.5f, 0.5f), new Vector2d(0.5f, 1.0f), new Vector4d(0.1f, 0.9f, 0.3f, 1.0f));
+        Renderer2D.drawQuad(new Vector2d(0.5f, 0.5f), new Vector2d(0.5f, 1.0f), mTexture);
         Renderer2D.endScene();
     }
 

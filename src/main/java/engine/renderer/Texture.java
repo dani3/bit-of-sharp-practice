@@ -1,7 +1,10 @@
 package engine.renderer;
 
 import engine.core.Logger;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.stb.STBImage;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
@@ -12,13 +15,13 @@ public class Texture implements AutoCloseable {
 
     private static final Logger mLogger = Logger.create(Texture.class.getName());
 
-    private int mHeight;
-    private int mWidth;
+    private final int mHeight;
+    private final int mWidth;
 
     private final int mRendererId;
 
-    private int mInternalFormat;
-    private int mDataFormat;
+    private final int mInternalFormat;
+    private final int mDataFormat;
 
     public Texture(int width, int height) {
         mInternalFormat = GL_RGBA8;
@@ -37,28 +40,29 @@ public class Texture implements AutoCloseable {
         glTextureParameteri(mRendererId, GL_TEXTURE_WRAP_T, GL_REPEAT);
     }
 
-    public Texture(final String path) {
-        IntBuffer width = ByteBuffer.allocateDirect(4).asIntBuffer();
-        IntBuffer height = ByteBuffer.allocateDirect(4).asIntBuffer();
-        IntBuffer channels = ByteBuffer.allocateDirect(4).asIntBuffer();
+    public Texture(final String path) throws IOException {
+        IntBuffer width = BufferUtils.createIntBuffer(1);
+        IntBuffer height = BufferUtils.createIntBuffer(1);
+        IntBuffer channels = BufferUtils.createIntBuffer(1);
 
         stbi_set_flip_vertically_on_load(true);
-        var data = stbi_load(path, width, height, channels, 0);
+        var data = stbi_load(path, width, height, channels, STBI_rgb_alpha);
 
         if (data == null) {
             mLogger.error("Failed to load image");
-            assert data != null;
+            throw new IOException(STBImage.stbi_failure_reason());
         }
 
         mWidth = width.get();
         mHeight = height.get();
 
         int internalFormat = 0;
+        int num_channels = channels.get(0);
         int dataFormat = 0;
-        if (channels.get() == 4) {
+        if (num_channels == 4) {
             internalFormat = GL_RGBA8;
             dataFormat = GL_RGBA;
-        } else if (channels.get() == 3) {
+        } else if (num_channels == 3) {
             internalFormat = GL_RGB8;
             dataFormat = GL_RGB;
         }
