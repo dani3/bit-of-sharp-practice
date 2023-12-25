@@ -29,7 +29,7 @@ public class VertexArray implements AutoCloseable {
     }
 
     public void addVertexBuffer(VertexBuffer vertexBuffer) {
-        assert vertexBuffer.getLayout().getElements().size() > 0;
+        assert !vertexBuffer.getLayout().getElements().isEmpty();
 
         glBindVertexArray(mRendererId);
         vertexBuffer.bind();

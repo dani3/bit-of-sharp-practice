@@ -46,7 +46,7 @@ public class Texture implements AutoCloseable {
         IntBuffer channels = BufferUtils.createIntBuffer(1);
 
         stbi_set_flip_vertically_on_load(true);
-        var data = stbi_load(path, width, height, channels, STBI_rgb_alpha);
+        var data = stbi_load(path, width, height, channels, 0);
 
         if (data == null) {
             mLogger.error("Failed to load image");

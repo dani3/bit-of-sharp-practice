@@ -1,6 +1,7 @@
 package engine.renderer.shader;
 
 import engine.core.Logger;
+import org.jetbrains.annotations.Nullable;
 import org.joml.Matrix4d;
 import org.joml.Vector3d;
 import org.joml.Vector4d;
@@ -26,11 +27,11 @@ public class Shader implements AutoCloseable {
 
     // Name of the shader.
     private final String mName;
-    // Id used to reference the shader.
+    // ID used to reference the shader.
     private int mRendererId;
 
     // Map that contains all the uniforms.
-    private Map<String, Integer> mUniformLocationCache = new HashMap<>();
+    private final Map<String, Integer> mUniformLocationCache = new HashMap<>();
 
     /**
      * Construct a shader given the path to the shaders source. The constructor will
@@ -149,7 +150,7 @@ public class Shader implements AutoCloseable {
                 .asFloatBuffer();
     }
 
-    private String readFile(final String filepath) {
+    private @Nullable String readFile(final String filepath) {
         BufferedReader br = null;
         StringBuilder result = new StringBuilder();
         try {

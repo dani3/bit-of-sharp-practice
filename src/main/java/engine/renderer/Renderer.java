@@ -17,7 +17,7 @@ public class Renderer implements IEventListener, AutoCloseable {
 
     public Renderer() {
         RenderCommand.init();
-        Renderer2D.init();
+        Renderer3D.init();
     }
 
     public void beginScene(final @NotNull OrthographicCamera camera) {
@@ -40,7 +40,7 @@ public class Renderer implements IEventListener, AutoCloseable {
 
     @Override
     public void close() throws Exception {
-        Renderer2D.shutdown();
+        Renderer3D.shutdown();
     }
 
     @Override
