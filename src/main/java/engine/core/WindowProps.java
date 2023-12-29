@@ -2,9 +2,9 @@ package engine.core;
 
 public class WindowProps {
 
-    private String mTitle;
-    private int mWidth;
-    private int mHeight;
+    private final String mTitle;
+    private final int mWidth;
+    private final int mHeight;
 
     public WindowProps(String title, int width, int height) {
         mTitle = title;

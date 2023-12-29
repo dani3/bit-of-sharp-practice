@@ -10,7 +10,7 @@ import engine.events.MouseScrolledEvent;
 import engine.events.WindowResizedEvent;
 import org.joml.Vector3d;
 
-public class OthographicCameraController implements IEventListener {
+public class OrthographicCameraController implements IEventListener {
 
     private static final Logger mLogger = Logger.create(Renderer.class.getName());
 
@@ -26,11 +26,11 @@ public class OthographicCameraController implements IEventListener {
     private float mCameraTranslationSpeed;
     private final float mCameraRotationSpeed;
 
-    public OthographicCameraController(float aspectRatio) {
+    public OrthographicCameraController(float aspectRatio) {
         this(aspectRatio, false);
     }
 
-    public OthographicCameraController(float aspectRatio, boolean rotation) {
+    public OrthographicCameraController(float aspectRatio, boolean rotation) {
         mAspectRatio = aspectRatio;
         mRotation = rotation;
 

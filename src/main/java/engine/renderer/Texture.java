@@ -1,5 +1,6 @@
 package engine.renderer;
 
+import engine.core.FileUtils;
 import engine.core.Logger;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.stb.STBImage;
@@ -11,36 +12,28 @@ import java.nio.IntBuffer;
 import static org.lwjgl.opengl.GL45.*;
 import static org.lwjgl.stb.STBImage.*;
 
+/**
+ * Class that represents a texture.
+ */
 public class Texture implements AutoCloseable {
 
     private static final Logger mLogger = Logger.create(Texture.class.getName());
 
-    private final int mHeight;
-    private final int mWidth;
-
     private final int mRendererId;
 
-    private final int mInternalFormat;
+    private final int mHeight;
+    private final int mWidth;
     private final int mDataFormat;
 
-    public Texture(int width, int height) {
-        mInternalFormat = GL_RGBA8;
-        mDataFormat = GL_RGBA;
+    /**
+     * Construct a new Texture given its filename.
+     *
+     * @param filename name of the file.
+     * @throws IOException Thrown when an error occurs when loading the texture.
+     */
+    public Texture(final String filename) throws IOException {
+        var path = FileUtils.getResourcePath(FileUtils.RESOURCE_TYPE_TEXTURE, filename);
 
-        mWidth = width;
-        mHeight = height;
-
-        mRendererId = glCreateTextures(GL_TEXTURE_2D);
-        glTextureStorage2D(mRendererId, 1, mInternalFormat, mWidth, mHeight);
-
-        glTextureParameteri(mRendererId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTextureParameteri(mRendererId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-        glTextureParameteri(mRendererId, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTextureParameteri(mRendererId, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    }
-
-    public Texture(final String path) throws IOException {
         IntBuffer width = BufferUtils.createIntBuffer(1);
         IntBuffer height = BufferUtils.createIntBuffer(1);
         IntBuffer channels = BufferUtils.createIntBuffer(1);
@@ -67,11 +60,10 @@ public class Texture implements AutoCloseable {
             dataFormat = GL_RGB;
         }
 
-        mInternalFormat = internalFormat;
         mDataFormat = dataFormat;
 
         mRendererId = glCreateTextures(GL_TEXTURE_2D);
-        glTextureStorage2D(mRendererId, 1, mInternalFormat, mWidth, mHeight);
+        glTextureStorage2D(mRendererId, 1, internalFormat, mWidth, mHeight);
 
         glTextureParameteri(mRendererId, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTextureParameteri(mRendererId, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -85,10 +77,18 @@ public class Texture implements AutoCloseable {
         stbi_image_free(data);
     }
 
+    /**
+     * Get the height of the texture.
+     * @return Height of the texture.
+     */
     public int getHeight() {
         return mHeight;
     }
 
+    /**
+     * Get the width of the texture.
+     * @return width of the texture.
+     */
     public int getWidth() {
         return mWidth;
     }
@@ -98,18 +98,10 @@ public class Texture implements AutoCloseable {
         glDeleteTextures(mRendererId);
     }
 
-    public void setData(ByteBuffer data) {
-        int bpp = (mDataFormat == GL_RGBA) ? 4 : 3;
-
-        if (data.capacity() < mWidth * mHeight * bpp) {
-            mLogger.error("Data must be entire texture");
-            assert false;
-        }
-
-        glTextureSubImage2D(
-                mRendererId, 0, 0, 0, mWidth, mHeight, mDataFormat, GL_UNSIGNED_BYTE, data);
-    }
-
+    /**
+     * Bind the texture.
+     * @param slot OpenGL slot to bind the texture to,
+     */
     public void bind(int slot) {
         glBindTextureUnit(slot, mRendererId);
     }

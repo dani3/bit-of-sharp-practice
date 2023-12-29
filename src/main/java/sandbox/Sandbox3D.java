@@ -6,14 +6,13 @@ import engine.renderer.Texture;
 import engine.renderer.buffer.*;
 import engine.renderer.shader.ShaderDataType;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector2d;
 import org.joml.Vector3d;
 import org.joml.Vector4d;
 
 import engine.core.Layer;
 import engine.core.Timestep;
 import engine.events.Event;
-import engine.renderer.OthographicCameraController;
+import engine.renderer.OrthographicCameraController;
 import engine.renderer.RenderCommand;
 import engine.renderer.Renderer3D;
 
@@ -21,19 +20,18 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 public class Sandbox3D extends Layer {
 
     private static final Logger mLogger = Logger.create(Sandbox3D.class.getName());
 
-    private final OthographicCameraController mCameraController;
+    private final OrthographicCameraController mCameraController;
     private final List<Entity> mEntities;
 
     public Sandbox3D() {
         super("Sandbox3D");
 
-        mCameraController = new OthographicCameraController(1280.f / 720.f);
+        mCameraController = new OrthographicCameraController(1280.f / 720.f);
         mEntities = new ArrayList<>();
     }
 
@@ -45,9 +43,7 @@ public class Sandbox3D extends Layer {
             var squareIndexBuffer = new IndexBuffer(squareIndices);
             quad.setIndexBuffer(squareIndexBuffer);
 
-            var texture = new Texture(
-                    Objects.requireNonNull(
-                            Renderer3D.class.getClassLoader().getResource("textures/Checkerboard.png")).getPath().replaceFirst("/", ""));
+            var texture = new Texture("Checkerboard.png");
             var entity = new Entity(quad, texture, new Vector3d(0.5f, 0.5f, 1.0f), new Vector3d(0.0f, 0.0f,0.0f), 1.0f);
 
             mEntities.add(entity);

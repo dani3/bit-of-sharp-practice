@@ -1,5 +1,6 @@
 package engine.renderer;
 
+import engine.core.FileUtils;
 import engine.core.Logger;
 import engine.entities.Entity;
 import engine.renderer.buffer.*;
@@ -21,10 +22,9 @@ public class Renderer3D {
     private static Shader mTextureShader;
 
     public static void init() {
-        var shaderPath = Objects.requireNonNull(
-                Objects.requireNonNull(
-                        Renderer3D.class.getClassLoader().getResource("shaders/Texture.glsl")).getPath());
+        var shaderPath = FileUtils.getResourcePath(FileUtils.RESOURCE_TYPE_SHADERS, "Texture.glsl");
         mTextureShader = new Shader(shaderPath);
+        // TODO Add shader to `ShaderLibrary`.
 
         mTextureShader.bind();
         mTextureShader.uploadUniformInt("u_Texture", 0);

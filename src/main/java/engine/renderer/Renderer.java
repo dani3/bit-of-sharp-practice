@@ -51,6 +51,7 @@ public class Renderer implements IEventListener, AutoCloseable {
     }
 
     private void onWindowResized(final @NotNull WindowResizedEvent e) {
+        mLogger.info(e.toString());
         RenderCommand.setViewport(0, 0, e.getWidth(), e.getHeight());
     }
 }

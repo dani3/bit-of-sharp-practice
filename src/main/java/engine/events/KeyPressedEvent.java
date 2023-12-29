@@ -4,7 +4,7 @@ import java.text.MessageFormat;
 
 public class KeyPressedEvent extends KeyEvent {
 
-    private int mRepeatCount;
+    private final int mRepeatCount;
 
     public KeyPressedEvent(int keyCode, int repeatCount) {
         super(keyCode);

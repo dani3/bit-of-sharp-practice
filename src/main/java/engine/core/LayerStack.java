@@ -1,5 +1,7 @@
 package engine.core;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,7 +12,7 @@ import java.util.List;
  */
 public class LayerStack implements Iterable<Layer> {
 
-    private List<Layer> mLayers;
+    private final List<Layer> mLayers;
 
     /**
      * Construct a LayerStack.
@@ -61,7 +63,7 @@ public class LayerStack implements Iterable<Layer> {
      * @return an Iterator.
      */
     @Override
-    public Iterator<Layer> iterator() {
+    public @NotNull Iterator<Layer> iterator() {
         return new LayerStackIterator(this);
     }
 

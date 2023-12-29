@@ -2,7 +2,7 @@ package engine.core;
 
 public class Timestep {
 
-    private float mTime;
+    private final float mTime;
 
     public Timestep() {
         mTime = 0.0f;
